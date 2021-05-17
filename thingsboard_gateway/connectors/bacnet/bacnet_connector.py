@@ -67,7 +67,7 @@ class BACnetConnector(Thread, Connector):
     def run(self):
         self.__connected = True
         self.scan_network()
-        self._application.do_whois()
+        # self._application.do_whois()
         log.debug("WhoIsRequest has been sent.")
         self.scan_network()
         while not self.__stopped:
@@ -182,8 +182,8 @@ class BACnetConnector(Thread, Connector):
         log.info("RPC with iocb %r - cancelled.", iocb)
 
     def scan_network(self):
-        self._application.do_whois()
-        log.debug("WhoIsRequest has been sent.")
+        # self._application.do_whois()
+        # log.debug("WhoIsRequest has been sent.")
         for device in self.__config_devices:
             try:
                 if self._application.check_or_add(device):

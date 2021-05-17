@@ -64,6 +64,25 @@ class TBBACnetApplication(BIPSimpleApplication):
         except Exception as e:
             log.exception(e)
 
+    def do_read_dev(self, device=None):
+        """ Reads device object (instead of sending I-Am request)
+
+        (Some devices answer only the first Who-Is request (probably in some time 
+        window, don't know the length), so after gateway reboot the device can not 
+        be activated)
+        """       
+
+        request = ReadPropertyRequest(
+                destination=device["address"],
+                objectIdentifier=device["objectIdentifier"],
+                propertyIdentifier='objectName',
+            )
+        iocb = IOCB(request)
+        deferred(self.request_io, iocb)
+        iocb.add_callback(self.__iam_cb)
+        self.requests_in_progress.update({iocb: {"callback": self.__iam_cb}})
+        log.debug("Sending readProperty to device without sending Who-Is request.")
+
     def indication(self, apdu: APDU):
         if isinstance(apdu, IAmRequest):
             log.debug("Received IAmRequest from device with ID: %i and address %s:%i",

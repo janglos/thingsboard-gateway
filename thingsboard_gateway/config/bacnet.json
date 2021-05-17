@@ -12,6 +12,7 @@
       "deviceName": "BACnet Device ${objectName}",
       "deviceType": "default",
       "address": "192.168.188.181:10520",
+      "objectIdentifier": 85600,
       "pollPeriod": 10000,
       "attributes": [
         {
