@@ -70,11 +70,13 @@ class TBBACnetApplication(BIPSimpleApplication):
         (Some devices answer only the first Who-Is request (probably in some time 
         window, don't know the length), so after gateway reboot the device can not 
         be activated)
-        """       
+        """     
+
+        address = device["address"] if isinstance(device["address"], Address) else Address(device["address"])  
 
         request = ReadPropertyRequest(
-                destination=device["address"],
-                objectIdentifier=device["objectIdentifier"],
+                destination=address,
+                objectIdentifier=ObjectIdentifier(device["objectIdentifier"]),
                 propertyIdentifier='objectName',
             )
         iocb = IOCB(request)
