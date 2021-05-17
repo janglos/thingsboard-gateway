@@ -85,21 +85,23 @@ class TBBACnetApplication(BIPSimpleApplication):
 
     def indication(self, apdu: APDU):
         if isinstance(apdu, IAmRequest):
-            log.debug("Received IAmRequest from device with ID: %i and address %s:%i",
-                      apdu.iAmDeviceIdentifier[1],
-                      apdu.pduSource.addrTuple[0],
-                      apdu.pduSource.addrTuple[1]
-                      )
-            log.debug(apdu.pduSource)
-            request = ReadPropertyRequest(
-                destination=apdu.pduSource,
-                objectIdentifier=apdu.iAmDeviceIdentifier,
-                propertyIdentifier='objectName',
-            )
-            iocb = IOCB(request)
-            deferred(self.request_io, iocb)
-            iocb.add_callback(self.__iam_cb, vendor_id=apdu.vendorID)
-            self.requests_in_progress.update({iocb: {"callback": self.__iam_cb}})
+            log.debug("Received IAmRequest, not used currently.")
+        # if isinstance(apdu, IAmRequest):
+        #     log.debug("Received IAmRequest from device with ID: %i and address %s:%i",
+        #               apdu.iAmDeviceIdentifier[1],
+        #               apdu.pduSource.addrTuple[0],
+        #               apdu.pduSource.addrTuple[1]
+        #               )
+        #     log.debug(apdu.pduSource)
+        #     request = ReadPropertyRequest(
+        #         destination=apdu.pduSource,
+        #         objectIdentifier=apdu.iAmDeviceIdentifier,
+        #         propertyIdentifier='objectName',
+        #     )
+        #     iocb = IOCB(request)
+        #     deferred(self.request_io, iocb)
+        #     iocb.add_callback(self.__iam_cb, vendor_id=apdu.vendorID)
+        #     self.requests_in_progress.update({iocb: {"callback": self.__iam_cb}})
 
     def do_read_property(self, device, mapping_type=None, config=None, callback=None):
         try:
@@ -131,7 +133,8 @@ class TBBACnetApplication(BIPSimpleApplication):
     def check_or_add(self, device):
         device_address = device["address"] if isinstance(device["address"], Address) else Address(device["address"])
         if self.discovered_devices.get(device_address) is None:
-            self.do_whois(device)
+            self.do_read_dev(device)
+            # self.do_whois(device)
             return False
         return True
 
