@@ -127,10 +127,10 @@ class TBBACnetApplication(BIPSimpleApplication):
             log.exception("exception: %r", error)
 
     def do_binary_rising_edge(self, device, callback=None):
-        device["propertyValue"] = 1
-        self.do_write_property(device)
-        device["propertyValue"] = 0
-        self.do_write_property(device)
+        device.update({"propertyValue": 1})
+        self.do_write_property(device, callback=callback)
+        device.update({"propertyValue": 0})
+        self.do_write_property(device, callback=callback)
 
     def check_or_add(self, device):
         device_address = device["address"] if isinstance(device["address"], Address) else Address(device["address"])
