@@ -76,7 +76,7 @@ class TBBACnetApplication(BIPSimpleApplication):
 
         request = ReadPropertyRequest(
                 destination=address,
-                objectIdentifier=ObjectIdentifier("device:" + device["objectIdentifier"]),
+                objectIdentifier=ObjectIdentifier("device:" + str(device["objectIdentifier"])),
                 propertyIdentifier='objectName',
             )
         iocb = IOCB(request)
